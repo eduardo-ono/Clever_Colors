@@ -1,0 +1,29 @@
+{
+  "Red": {
+    "IndianRed":   "CD5C5C",
+    "LightCoral":  "F08080",
+    "Salmon":      "FA8072",
+    "DarkSalmon":  "E9967A",
+    "LightSalmon": "FFA07A",
+    "Crimson":     "DC143C",
+    "Red":         "FF0000",
+    "FireBrick":   "B22222",
+    "DarkRed":     "8B0000"
+  },
+  "Pink": {
+    "Pink":            "FFC0CB",
+    "LightPink":       "FFB6C1",
+	  "HotPink":         "FF69B4",
+	  "DeepPink":        "FF1493",
+	  "MediumVioletRed": "C71585",
+	  "PaleVioletRed":   "DB7093"
+  },
+  "Orange": {
+    "LightSalmon": "FFA07A",
+	  "Coral":       "FF7F50",
+	  "Tomato":      "FF6347",
+	  "OrangeRed":   "FF4500",
+	  "DarkOrange":  "FF8C00",
+	  "Orange":      "FFA500"
+  }
+}
