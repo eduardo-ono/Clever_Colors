@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clever Colors</title>
+  <link rel="stylesheet" href="./bin/style.css">
+  <script>
+
+      var colors;
+      // AJAX
+      var ajax = new XMLHttpRequest();
+      ajax.open('GET', './json/colors.json');
+      ajax.send();
+      ajax.addEventListener('readystatechange', function () {
+        if (ajax.readyState === 4 && ajax.status === 200)
+        {
+        }
+      });
+      ajax.onload = function () {
+        colors = JSON.parse(ajax.responseText);
+      }
+
+    function hexStr2Hex(hexStr) {
+      return [
+        parseInt(hexStr[1], 16),
+        parseInt(hexStr[2], 16),
+        parseInt(hexStr[3], 16)
+      ];
+    }
+
+    function executar() {
+      hexColor = document.getElementById('hexColor').value;
+      regex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexColor);
+      let color;
+      if (regex) {
+        color = hexStr2Hex(regex);
+      }
+      else color = null;
+      nearestColors = new Array();
+      minDist = 3 * 255 ** 2;
+      const baseColors = Object.keys(colors);
+      for (let i = 0; i < baseColors.length; i++) {
+        for (let namedColor in colors[baseColors[i]]) {
+          regex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(colors[baseColors[i]][namedColor]);
+          let fixedColor = hexStr2Hex(regex);
+          let dist = Math.sqrt((fixedColor[0]-color[0])**2 + (fixedColor[1]-color[1])**2 + (fixedColor[2]-color[2])**2);
+          if (dist <= minDist) {
+            if (dist < minDist) {
+              while (nearestColors.length > 0)
+                nearestColors.pop();
+              minDist = dist;
+            }
+            nearestColors.push({ [namedColor]: colors[baseColors[i]][namedColor] });
+          }
+        }
+      }
+      renderHTML(color, nearestColors);
+    }
+
+    function renderHTML(colorArray, nearestColors) {
+      let hexColor = '';
+      for (let i = 0; i < colorArray.length; i++) {
+        hexColor += colorArray[i].toString(16).padStart(2, '0');
+      }
+      let str = '';
+      str += `<div class="color-box" style="background-color: #${hexColor}">`;
+      str += `</div>`;
+      nearestColors.forEach(element => {
+        keys = Object.keys(element);
+        str += `<div class="color-box" style="background-color: #${element[keys]}">`;
+        str += keys + '<br>' + '#' + element[keys];
+        str += `</div>`;
+      });
+      const conteudo = document.getElementById('output');
+      conteudo.innerHTML = str;
+    }
+
+  </script>
+</head>
+
+<body>
+  <div id="container">
+    <fieldset>
+      <div class="campo">
+        <label for="hexColor"><strong>Cor em hexadecimal*</strong></label>
+        <input type="text" name="hexColor" id="hexColor" required>
+      </div>
+      <button onclick="executar()">Encontrar</button>
+    </fieldset>
+    <div id="output">
+    </div>
+  </div>
+</body>
+</html>
